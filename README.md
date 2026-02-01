@@ -6,34 +6,44 @@ A simple, modern Todo List application built with FastAPI backend and Svelte fro
 
 ```
 fast-api-py/
-├── client/                 # Svelte frontend
+├── client/                          # Svelte frontend
 │   ├── src/
-│   │   ├── components/    # Reusable Svelte components
+│   │   ├── components/             # Reusable Svelte components
 │   │   │   ├── AddTodo.svelte
 │   │   │   └── TodoItem.svelte
-│   │   ├── stores/        # Svelte stores (state management)
+│   │   ├── stores/                 # Svelte stores (state management)
 │   │   │   └── todos.js
-│   │   ├── App.svelte     # Main App component
-│   │   └── main.js        # Entry point
-│   ├── public/            # Static files
-│   ├── index.html         # HTML template
-│   ├── package.json       # Frontend dependencies
-│   ├── vite.config.js     # Vite configuration
-│   └── svelte.config.js   # Svelte configuration
+│   │   ├── App.svelte              # Main App component
+│   │   └── main.js                 # Entry point
+│   ├── public/                     # Static files
+│   ├── index.html                  # HTML template
+│   ├── package.json                # Frontend dependencies
+│   ├── vite.config.js              # Vite configuration
+│   └── svelte.config.js            # Svelte configuration
 │
-├── server/                # FastAPI backend
+├── server/                          # FastAPI backend
 │   ├── app/
-│   │   ├── models/        # Database models and schemas
+│   │   ├── models/                 # Database models and schemas
 │   │   │   ├── todo.py
 │   │   │   └── schemas.py
-│   │   ├── routes/        # API endpoints
+│   │   ├── routes/                 # API endpoints
 │   │   │   └── todos.py
-│   │   ├── database/      # Database configuration
+│   │   ├── database/               # Legacy database module
 │   │   │   └── db.py
 │   │   └── __init__.py
-│   ├── main.py           # FastAPI app entry point
-│   └── requirements.txt   # Backend dependencies
+│   ├── database/                   # PostgreSQL configuration
+│   │   ├── config.py               # Database connection config
+│   │   ├── init_db.py              # Database initialization script
+│   │   └── migrations/             # SQL migration files
+│   │       └── 001_initial_schema.sql
+│   ├── main.py                     # FastAPI app entry point
+│   ├── requirements.txt            # Backend dependencies
+│   ├── .env.example                # Environment variables template
+│   └── .gitignore
 │
+├── docker-compose.yml              # Docker compose for PostgreSQL
+├── DATABASE_SETUP.md               # Database setup guide
+├── .gitignore
 └── README.md
 ```
 
@@ -55,6 +65,18 @@ fast-api-py/
 - Python 3.8+
 - Node.js 16+
 - npm or yarn
+- Docker & Docker Compose (optional, for PostgreSQL in containers)
+- OR PostgreSQL 14+ (if running locally)
+
+### Database Setup
+
+**Option 1: Using Docker Compose (Recommended)**
+```bash
+docker-compose up -d
+```
+
+**Option 2: Local PostgreSQL**
+See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
 
 ### Backend Setup
 
@@ -83,7 +105,18 @@ fast-api-py/
    pip install -r requirements.txt
    ```
 
-5. Run the FastAPI server:
+5. Setup environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your database credentials
+   ```
+
+6. Initialize the database:
+   ```bash
+   python database/init_db.py
+   ```
+
+7. Run the FastAPI server:
    ```bash
    python main.py
    ```
@@ -145,14 +178,20 @@ This creates an optimized `dist` folder that can be served by any static file se
 - **Backend:**
   - FastAPI
   - SQLAlchemy
-  - SQLite
+  - PostgreSQL
   - Pydantic
+  - Alembic (for migrations)
 
 - **Frontend:**
   - Svelte
   - Vite
   - Axios
   - CSS3
+
+- **Database:**
+  - PostgreSQL 15
+  - Docker & Docker Compose
+  - pgAdmin (optional)
 
 ## License
 
