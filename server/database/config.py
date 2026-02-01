@@ -1,25 +1,34 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import StaticPool
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Database URL
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    f"postgresql://{os.getenv('DATABASE_USER', 'postgres')}:{os.getenv('DATABASE_PASSWORD', 'password')}@{os.getenv('DATABASE_HOST', 'localhost')}:{os.getenv('DATABASE_PORT', '5432')}/{os.getenv('DATABASE_NAME', 'todoapp')}"
-)
+# Determine database type from environment or use SQLite by default
+use_postgresql = os.getenv("USE_POSTGRESQL", "false").lower() == "true"
 
-print(f"Connecting to database: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else DATABASE_URL}")
+if use_postgresql:
+    # PostgreSQL configuration
+    DATABASE_URL = os.getenv(
+        "DATABASE_URL",
+        f"postgresql://{os.getenv('DATABASE_USER', 'postgres')}:{os.getenv('DATABASE_PASSWORD', 'password')}@{os.getenv('DATABASE_HOST', 'localhost')}:{os.getenv('DATABASE_PORT', '5432')}/{os.getenv('DATABASE_NAME', 'todoapp')}"
+    )
+    pool_config = {"poolclass": StaticPool}
+else:
+    # SQLite configuration (default)
+    DATABASE_URL = "sqlite:///./todos.db"
+    pool_config = {"connect_args": {"check_same_thread": False}, "poolclass": StaticPool}
+
+print(f"Using database: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else DATABASE_URL}")
 
 # Create engine
 engine = create_engine(
     DATABASE_URL,
-    poolclass=NullPool,
-    echo=os.getenv("DEBUG", "False") == "True"
+    echo=os.getenv("DEBUG", "False") == "True",
+    **pool_config
 )
 
 # Create session factory

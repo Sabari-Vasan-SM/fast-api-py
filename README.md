@@ -1,198 +1,142 @@
-# Todo List Application - FastAPI + Svelte
+# 📝 Todo List Application
 
-A simple, modern Todo List application built with FastAPI backend and Svelte frontend.
+A simple, fast, and modern Todo List app built with **FastAPI** (backend) and **Svelte** (frontend).
 
-## Project Structure
-
-```
-fast-api-py/
-├── client/                          # Svelte frontend
-│   ├── src/
-│   │   ├── components/             # Reusable Svelte components
-│   │   │   ├── AddTodo.svelte
-│   │   │   └── TodoItem.svelte
-│   │   ├── stores/                 # Svelte stores (state management)
-│   │   │   └── todos.js
-│   │   ├── App.svelte              # Main App component
-│   │   └── main.js                 # Entry point
-│   ├── public/                     # Static files
-│   ├── index.html                  # HTML template
-│   ├── package.json                # Frontend dependencies
-│   ├── vite.config.js              # Vite configuration
-│   └── svelte.config.js            # Svelte configuration
-│
-├── server/                          # FastAPI backend
-│   ├── app/
-│   │   ├── models/                 # Database models and schemas
-│   │   │   ├── todo.py
-│   │   │   └── schemas.py
-│   │   ├── routes/                 # API endpoints
-│   │   │   └── todos.py
-│   │   ├── database/               # Legacy database module
-│   │   │   └── db.py
-│   │   └── __init__.py
-│   ├── database/                   # PostgreSQL configuration
-│   │   ├── config.py               # Database connection config
-│   │   ├── init_db.py              # Database initialization script
-│   │   └── migrations/             # SQL migration files
-│   │       └── 001_initial_schema.sql
-│   ├── main.py                     # FastAPI app entry point
-│   ├── requirements.txt            # Backend dependencies
-│   ├── .env.example                # Environment variables template
-│   └── .gitignore
-│
-├── docker-compose.yml              # Docker compose for PostgreSQL
-├── DATABASE_SETUP.md               # Database setup guide
-├── .gitignore
-└── README.md
-```
-
-## Features
-
-- ✅ Create, Read, Update, Delete (CRUD) todos
-- ✅ Mark todos as complete/incomplete
-- ✅ Add descriptions to todos
-- ✅ View creation date for each todo
-- ✅ Filter todos by completion status
-- ✅ Modern, responsive UI
-- ✅ Real-time updates with Svelte stores
-- ✅ CORS-enabled API
-
-## Setup Instructions
-
-### Prerequisites
-
-- Python 3.8+
-- Node.js 16+
-- npm or yarn
-- Docker & Docker Compose (optional, for PostgreSQL in containers)
-- OR PostgreSQL 14+ (if running locally)
-
-### Database Setup
-
-**Option 1: Using Docker Compose (Recommended)**
-```bash
-docker-compose up -d
-```
-
-**Option 2: Local PostgreSQL**
-See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
+## 🚀 Quick Start
 
 ### Backend Setup
 
-1. Navigate to the server directory:
-   ```bash
-   cd server
-   ```
+```bash
+cd server
 
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   ```
+# Create & activate virtual environment
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # macOS/Linux
 
-3. Activate the virtual environment:
-   - **Windows:**
-     ```bash
-     venv\Scripts\activate
-     ```
-   - **macOS/Linux:**
-     ```bash
-     source venv/bin/activate
-     ```
+# Install & run
+pip install -r requirements.txt
+python -m database.init_db
+python main.py
+```
 
-4. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. Setup environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database credentials
-   ```
-
-6. Initialize the database:
-   ```bash
-   python database/init_db.py
-   ```
-
-7. Run the FastAPI server:
-   ```bash
-   python main.py
-   ```
-
-   The API will be available at `http://localhost:8000`
-   API docs: `http://localhost:8000/docs`
+**API:** http://localhost:8000  
+**Docs:** http://localhost:8000/docs
 
 ### Frontend Setup
 
-1. Navigate to the client directory:
-   ```bash
-   cd client
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-   The app will be available at `http://localhost:5173`
-
-## API Endpoints
-
-- `GET /api/todos` - Get all todos
-- `GET /api/todos/{id}` - Get a specific todo
-- `POST /api/todos` - Create a new todo
-- `PUT /api/todos/{id}` - Update a todo
-- `DELETE /api/todos/{id}` - Delete a todo
-- `GET /health` - Health check endpoint
-
-## Building for Production
-
-### Backend
-
-The FastAPI app is production-ready. Use a production server like Gunicorn:
-
 ```bash
-pip install gunicorn
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+cd client
+npm install
+npm run dev
 ```
 
-### Frontend
+**App:** http://localhost:5173
 
-Build the Svelte app:
+---
 
-```bash
-npm run build
+## 📊 Features
+
+✅ Create, update, delete todos  
+✅ Mark complete/incomplete  
+✅ Search & filter todos  
+✅ Sort by date or status  
+✅ Descriptions & timestamps  
+✅ Auto API documentation  
+✅ Error handling & validation  
+✅ Pagination support  
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/todos` | Get all todos |
+| GET | `/api/todos/{id}` | Get single todo |
+| POST | `/api/todos` | Create todo |
+| PUT | `/api/todos/{id}` | Update todo |
+| DELETE | `/api/todos/{id}` | Delete todo |
+| GET | `/api/todos/search/{query}` | Search |
+| DELETE | `/api/todos/clear-completed` | Clear completed |
+
+### Query Parameters
+
+```
+GET /api/todos?skip=0&limit=10&status=active&sort=date
 ```
 
-This creates an optimized `dist` folder that can be served by any static file server.
+---
 
-## Technologies Used
+## 🛠️ Tech Stack
 
-- **Backend:**
-  - FastAPI
-  - SQLAlchemy
-  - PostgreSQL
-  - Pydantic
-  - Alembic (for migrations)
+- **FastAPI** - Python web framework
+- **SQLAlchemy** - Database ORM
+- **Pydantic** - Data validation
+- **Svelte 4** - UI framework
+- **Vite** - Build tool
+- **SQLite/PostgreSQL** - Database
 
-- **Frontend:**
-  - Svelte
-  - Vite
-  - Axios
-  - CSS3
+---
 
-- **Database:**
-  - PostgreSQL 15
-  - Docker & Docker Compose
-  - pgAdmin (optional)
+## 📦 Project Structure
 
-## License
+```
+├── server/
+│   ├── app/
+│   │   ├── models/      (database & schemas)
+│   │   ├── routes/      (API endpoints)
+│   │   └── utils/       (helpers)
+│   ├── database/        (DB config & init)
+│   ├── main.py
+│   └── requirements.txt
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   └── stores/
+│   └── package.json
+└── README.md
+```
+
+---
+
+## 🗄️ Database
+
+**SQLite** (default - no setup needed)
+
+**PostgreSQL** (optional):
+```env
+USE_POSTGRESQL=true
+DATABASE_URL=postgresql://postgres:password@localhost:5432/todoapp
+```
+
+---
+
+## 💡 Example Usage
+
+```bash
+# Create
+curl -X POST http://localhost:8000/api/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Buy milk","description":"2% milk"}'
+
+# Get all
+curl http://localhost:8000/api/todos?limit=5
+
+# Search
+curl http://localhost:8000/api/todos/search/milk
+
+# Update
+curl -X PUT http://localhost:8000/api/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"completed":true}'
+
+# Delete
+curl -X DELETE http://localhost:8000/api/todos/1
+```
+
+---
+
+## 📄 License
 
 MIT

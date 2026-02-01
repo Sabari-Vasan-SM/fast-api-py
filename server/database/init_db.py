@@ -3,6 +3,13 @@ Database initialization script
 Run this to create all tables in the database
 """
 
+import sys
+import os
+
+# Add server directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from sqlalchemy import text
 from database.config import engine, SessionLocal
 from app.models.todo import Base
