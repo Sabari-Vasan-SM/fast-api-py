@@ -2,6 +2,8 @@
 SQLAlchemy models for todo application
 """
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Index, Text
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
@@ -19,6 +21,8 @@ class Todo(Base):
     title = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
     completed = Column(Boolean, default=False, nullable=False, index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    owner = relationship("User", back_populates="todos")
 
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
