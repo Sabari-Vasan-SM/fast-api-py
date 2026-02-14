@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from database.config import engine
 from app.models.todo import Base
 from app.routes import todos
+from app.routes import auth as auth_routes
 
 # Configure logging
 logging.basicConfig(
@@ -168,8 +169,10 @@ def health_check():
 # ROUTE INCLUSION
 # ============================================================================
 
-# Include todos router
+
+# Include todos and auth routers
 app.include_router(todos.router)
+app.include_router(auth_routes.router)
 
 logger.info("Routes registered successfully")
 

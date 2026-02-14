@@ -1,9 +1,31 @@
 """
 Pydantic schemas for request/response validation
 """
+
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 from datetime import datetime
+
+
+# User schemas for authentication
+class UserBase(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
+
+class UserCreate(UserBase):
+    password: str = Field(..., min_length=6, max_length=128)
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class UserResponse(UserBase):
+    id: int
+    class Config:
+        orm_mode = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class TodoBase(BaseModel):
