@@ -3,6 +3,7 @@ SQLAlchemy models for todo application
 """
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Index, Text
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
